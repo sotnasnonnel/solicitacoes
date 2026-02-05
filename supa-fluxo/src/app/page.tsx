@@ -333,8 +333,4 @@ export default function Home() {
       ) : null}
     </div>
   );
-<<<<<<< HEAD
-} 
-=======
-} 
->>>>>>> e2dfb52 (Atualiza arquivos)
+}
