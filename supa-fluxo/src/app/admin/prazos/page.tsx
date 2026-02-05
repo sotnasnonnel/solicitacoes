@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AdminGuard } from "@/app/admin/AdminGuard";
 import { supabase } from "@/lib/supabase";
 import { StatusBadge } from "@/app/components/StatusBadge";
-
+import { formatDateBR } from "@/lib/date";
 
 type Row = {
   id: number;
@@ -15,12 +15,6 @@ type Row = {
   assets?: { code?: string | null; title?: string | null } | null;
 };
 
-function formatDateBR(dateStr?: string | null) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("pt-BR");
-}
 
 export default function AdminPrazosPage() {
   return (

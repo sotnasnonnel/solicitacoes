@@ -1,15 +1,13 @@
-export function formatDateBR(iso: string | null | undefined) {
-  if (!iso) return "-";
-  // iso pode vir como "YYYY-MM-DD" (date) ou "YYYY-MM-DDTHH:mm:ss..." (timestamp)
-  const [datePart] = iso.split("T");
-  const [y, m, d] = datePart.split("-");
-  if (!y || !m || !d) return "-";
-  return `${d.padStart(2, "0")}/${m.padStart(2, "0")}/${y}`;
-}
+// src/lib/date.ts
+export function formatDateBR(value?: string | null) {
+  if (!value) return "—";
 
-export function formatDateTimeBR(iso: string | null | undefined) {
-  if (!iso) return "-";
-  const dt = new Date(iso);
-  if (Number.isNaN(dt.getTime())) return "-";
-  return dt.toLocaleString("pt-BR");
+  // Se vier DATE ou timestamp, usa só YYYY-MM-DD
+  const m = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    const [, y, mo, d] = m;
+    return `${d}/${mo}/${y}`;
+  }
+
+  return "—";
 }

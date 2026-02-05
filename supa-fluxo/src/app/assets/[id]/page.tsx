@@ -4,19 +4,28 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { AdminKanbanBoard, type SurveyLite, type SurveyStatus } from "../../components/AdminKanbanBoard";
+import { formatDateBR } from "@/lib/date";
+
+function dateOnlyToLocalSafe(d?: string | null) {
+  if (!d) return null;
+
+  // pega só a parte YYYY-MM-DD mesmo se vier timestamp
+  const m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+
+  const y = Number(m[1]);
+  const mo = Number(m[2]);
+  const day = Number(m[3]);
+
+  // meio-dia local evita virar dia anterior/seguinte por fuso
+  return new Date(y, mo - 1, day, 12, 0, 0);
+}
 
 const ADMIN_EMAILS = new Set([
   "milena.neves@phdengenharia.eng.br",
   "vinicius.costa@phdengenharia.eng.br",
   "lennon.santos@phdengenharia.eng.br",
 ]);
-
-function formatDateBR(dateStr?: string | null) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("pt-BR");
-}
 
 const OPEN_STATUSES: SurveyStatus[] = ["DRAFT", "SUBMITTED", "URGENT_REVIEW"];
 const INPROG_STATUSES: SurveyStatus[] = ["SCHEDULING", "SCHEDULED", "IN_PROGRESS"];

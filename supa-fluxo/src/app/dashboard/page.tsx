@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { AdminKanbanBoard, type SurveyLite, type SurveyStatus } from "../components/AdminKanbanBoard";
 import { StatusBadge } from "../components/StatusBadge";
+import { formatDateBR } from "@/lib/date";
+
 
 
 const ADMIN_EMAILS = new Set([
@@ -12,12 +14,7 @@ const ADMIN_EMAILS = new Set([
   "lennon.santos@phdengenharia.eng.br",
 ]);
 
-function formatDateBR(dateStr?: string | null) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("pt-BR");
-}
+
 
 const OPEN_STATUSES: SurveyStatus[] = ["DRAFT", "SUBMITTED", "URGENT_REVIEW"];
 const INPROG_STATUSES: SurveyStatus[] = ["SCHEDULING", "SCHEDULED", "IN_PROGRESS"];

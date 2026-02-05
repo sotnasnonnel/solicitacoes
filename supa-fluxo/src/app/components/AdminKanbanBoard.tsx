@@ -4,6 +4,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea
 import styles from "./AdminKanbanBoard.module.css";
 import { supabase } from "@/lib/supabase";
 import { StatusBadge } from "@/app/components/StatusBadge";
+import { formatDateBR } from "@/lib/date";
 
 
 export type SurveyStatus =
@@ -63,12 +64,6 @@ function colColor(col: KanbanCol) {
   return "#b85236";                             // vermelho
 }
 
-function formatDateBR(dateStr?: string | null) {
-  if (!dateStr) return "—";
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("pt-BR");
-}
 
 export function AdminKanbanBoard({
   surveys,
