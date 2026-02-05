@@ -42,9 +42,14 @@ export default function Home() {
 
       setUserId(user.id);
 
-      const { data: p } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-      const isAdmin = p?.role === "admin";
-      setRole(isAdmin ? "admin" : "user");
+      const { data: p } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      const isAdminLocal = p?.role === "admin";
+      setRole(isAdminLocal ? "admin" : "user");
 
       const { data, error } = await supabase
         .from("surveys")
@@ -73,6 +78,11 @@ export default function Home() {
       });
       
       setRows(arr);
+
+    };
+
+    load();
+  }, []);
 
 
   const isAdmin = role === "admin";
@@ -323,4 +333,4 @@ export default function Home() {
       ) : null}
     </div>
   );
-}
+} 
