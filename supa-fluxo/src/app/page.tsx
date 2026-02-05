@@ -51,18 +51,29 @@ export default function Home() {
         .select(
           "id, asset_id, requester, needed_date, admin_deadline, status, urgent, created_by, request_text, name, assets(code,title)"
         )
-        // ✅ Ordenar por Prazo (Admin) primeiro
-        .order("admin_deadline", { ascending: true, nullsLast: true })
-        // fallback
+
         .order("created_at", { ascending: false });
 
       if (error) return setErr(error.message);
+      
+      const arr = Array.isArray(data) ? (data as Row[]) : [];
+      
+      // ✅ Ordena por Prazo (Admin) (nulls por último)
+      // - quem tem admin_deadline vem primeiro (mais cedo primeiro)
+      // - quem não tem prazo fica no final
+      arr.sort((a, b) => {
+        const ad = a.admin_deadline ? new Date(a.admin_deadline).getTime() : Number.POSITIVE_INFINITY;
+        const bd = b.admin_deadline ? new Date(b.admin_deadline).getTime() : Number.POSITIVE_INFINITY;
+        if (ad !== bd) return ad - bd;
+      
+        // fallback: mais recente primeiro
+        const ac = new Date((a as any).created_at ?? 0).getTime();
+        const bc = new Date((b as any).created_at ?? 0).getTime();
+        return bc - ac;
+      });
+      
+      setRows(arr);
 
-      setRows(Array.isArray(data) ? (data as Row[]) : []);
-    };
-
-    load();
-  }, []);
 
   const isAdmin = role === "admin";
 
